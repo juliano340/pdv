@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import ProdutoForm from './ProdutoForm';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -72,6 +73,16 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
     setHighlightNome(true);
   };
 
+  const handleAddProduto = (produto) => {
+    onAddProduto(produto);
+    toast.success('Produto adicionado com sucesso!');
+  };
+
+  const handleEditProduto = (produto) => {
+    onEditProduto(produto);
+    toast.success('Produto atualizado com sucesso!');
+  };
+
   // Ordena os produtos em ordem alfabética pelo nome
   const sortedProdutos = [...produtos].sort((a, b) => a.nome.localeCompare(b.nome));
 
@@ -91,6 +102,8 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
 
   return (
     <div className="flex flex-col h-screen bg-white text-black p-4 rounded-lg shadow-lg">
+
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <Link href="/" legacyBehavior>
           <a className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Voltar</a>
@@ -164,7 +177,7 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
                 <p className="text-gray-700">{`Preço: R$ ${produto.preco}`}</p>
                 <p className="text-gray-700">{`Estoque: ${produto.estoque}`}</p>
               </div>
-              <div className="flex space-x-2 w-full sm:w-auto mt-2 sm:mt-0">
+              <div className="flex space-x-2">
                 <button
                   onClick={() => handleEdit(produto)}
                   className="bg-[#4c5b6e] text-white px-4 py-2 rounded-lg hover:bg-[#616f83] transition w-full sm:w-auto"
@@ -216,8 +229,8 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
               </svg>
             </button>
             <ProdutoForm
-              onAddProduto={onAddProduto}
-              onEditProduto={onEditProduto}
+              onAddProduto={handleAddProduto}
+              onEditProduto={handleEditProduto}
               editProduto={editProduto}
               onCancelEdit={handleCancelEdit}
               highlightNome={highlightNome}

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import FormaDePagamentoForm from './FormaDePagamentoForm';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -55,6 +56,7 @@ const FormasDePagamento = () => {
 
   return (
     <div className="p-4">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-2">
           <Link href="/" legacyBehavior>

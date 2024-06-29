@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import ClienteForm from './ClienteForm';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -72,16 +73,30 @@ const ClienteList = ({ clientes, onDeleteCliente, onEditCliente, onAddCliente })
     setHighlightNome(true);
   };
 
+  const handleAddCliente = (cliente) => {
+    onAddCliente(cliente);
+    toast.success('Cliente adicionado com sucesso!');
+  };
+
+  const handleEditCliente = (cliente) => {
+    onEditCliente(cliente);
+    toast.success('Cliente atualizado com sucesso!');
+  };
+
   // Ordena os clientes em ordem alfabética pelo nome
   const sortedClientes = [...clientes].sort((a, b) => a.nome.localeCompare(b.nome));
 
-  // Filtra os clientes com base no termo de pesquisa e no tipo de pesquisa, considerando apenas o nome do cliente
+  // Filtra os clientes com base no termo de pesquisa e no tipo de pesquisa, considerando nome, email ou telefone
   const filteredClientes = sortedClientes.filter(cliente => {
     const searchTermLower = searchTerm.toLowerCase();
     if (searchType === 'starting') {
-      return cliente.nome.toLowerCase().startsWith(searchTermLower);
+      return cliente.nome.toLowerCase().startsWith(searchTermLower) ||
+             cliente.email.toLowerCase().startsWith(searchTermLower) ||
+             cliente.telefone.toLowerCase().startsWith(searchTermLower);
     } else {
-      return cliente.nome.toLowerCase().includes(searchTermLower);
+      return cliente.nome.toLowerCase().includes(searchTermLower) ||
+             cliente.email.toLowerCase().includes(searchTermLower) ||
+             cliente.telefone.toLowerCase().includes(searchTermLower);
     }
   });
 
@@ -91,6 +106,7 @@ const ClienteList = ({ clientes, onDeleteCliente, onEditCliente, onAddCliente })
 
   return (
     <div className="flex flex-col h-screen bg-white text-black p-4 rounded-lg shadow-lg">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <Link href="/" legacyBehavior>
           <a className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Voltar</a>
@@ -163,7 +179,7 @@ const ClienteList = ({ clientes, onDeleteCliente, onEditCliente, onAddCliente })
                 <p className="text-gray-700">{cliente.email}</p>
                 <p className="text-gray-700">{cliente.telefone}</p>
               </div>
-              <div className="flex space-x-2 w-full sm:w-auto mt-2 sm:mt-0">
+              <div className="flex space-x-2">
                 <button
                   onClick={() => handleEdit(cliente)}
                   className="bg-[#4c5b6e] text-white px-4 py-2 rounded-lg hover:bg-[#616f83] transition w-full sm:w-auto"
@@ -215,8 +231,8 @@ const ClienteList = ({ clientes, onDeleteCliente, onEditCliente, onAddCliente })
               </svg>
             </button>
             <ClienteForm
-              onAddCliente={onAddCliente}
-              onEditCliente={onEditCliente}
+              onAddCliente={handleAddCliente}
+              onEditCliente={handleEditCliente}
               editCliente={editCliente}
               onCancelEdit={handleCancelEdit}
               highlightNome={highlightNome}
