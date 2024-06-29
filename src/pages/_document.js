@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <title>PDV</title>
       <link rel="icon" href="/pdv.png" />
       </Head>
       <body>

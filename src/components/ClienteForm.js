@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, highlightNome }) => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [error, setError] = useState('');
-  const [highlightFields, setHighlightFields] = useState({
-    nome: false,
-    email: false,
-    telefone: false,
-  });
+  const [highlightFields, setHighlightFields] = useState({ nome: false, email: false, telefone: false });
 
   useEffect(() => {
     if (editCliente) {
       setNome(editCliente.nome);
       setEmail(editCliente.email);
       setTelefone(editCliente.telefone);
+      setHighlightFields({ nome: false, email: false, telefone: false });
     } else {
       setNome('');
       setEmail('');
@@ -27,45 +22,36 @@ const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, h
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const highlight = {
-      nome: !nome,
-      email: !email,
-      telefone: !telefone,
-    };
-
-    setHighlightFields(highlight);
-
     if (!nome || !email || !telefone) {
-      setError('Todos os campos são obrigatórios');
+      setHighlightFields({
+        nome: !nome,
+        email: !email,
+        telefone: !telefone,
+      });
       return;
     }
 
+    const novoCliente = {
+      id: editCliente ? editCliente.id : Date.now(),
+      nome,
+      email,
+      telefone,
+    };
+
     if (editCliente) {
-      onEditCliente({ ...editCliente, nome, email, telefone });
-      onCancelEdit();
-      toast.success('Cliente atualizado com sucesso!');
+      onEditCliente(novoCliente);
     } else {
-      const novoCliente = { id: Date.now(), nome, email, telefone };
       onAddCliente(novoCliente);
-      onCancelEdit(); // Esconde o formulário após adicionar o cliente
-      toast.success('Cliente adicionado com sucesso!');
     }
 
-    setNome('');
-    setEmail('');
-    setTelefone('');
-    setError('');
-    setHighlightFields({ nome: false, email: false, telefone: false }); // Remover destaque dos campos
+    onCancelEdit();
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`p-4 m-4 shadow rounded-lg ${editCliente ? 'bg-[#4c5b6e]' : 'bg-[#384658]'} w-full max-w-4xl mx-auto`}
-    >
-      <h3 className="text-xl font-bold mb-4 text-white">{editCliente ? 'Editar Cliente' : 'Adicionar Cliente'}</h3>
+    <form onSubmit={handleSubmit} className={`p-4 shadow rounded-lg bg-gray-50 w-full ${highlightNome ? 'border border-red-500' : ''}`}>
+      <h3 className="text-xl font-bold mb-4">{editCliente ? 'Editar Cliente' : 'Adicionar Cliente'}</h3>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-300">Nome:</label>
+        <label className="block text-sm font-medium text-gray-700">Nome:</label>
         <input
           type="text"
           value={nome}
@@ -79,7 +65,7 @@ const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, h
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-300">Email:</label>
+        <label className="block text-sm font-medium text-gray-700">Email:</label>
         <input
           type="email"
           value={email}
@@ -93,7 +79,7 @@ const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, h
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-300">Telefone:</label>
+        <label className="block text-sm font-medium text-gray-700">Telefone:</label>
         <input
           type="text"
           value={telefone}
@@ -106,19 +92,11 @@ const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, h
           className={`mt-1 p-2 border ${highlightFields.telefone ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full`}
         />
       </div>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <div className="flex flex-col sm:flex-row sm:space-x-2">
-        <button
-          type="submit"
-          className="bg-[#233243] text-white px-4 py-2 rounded-lg hover:bg-[#384658] transition mb-2 sm:mb-0 w-full sm:w-auto"
-        >
-          {editCliente ? 'Atualizar Cliente' : 'Adicionar Cliente'}
+      <div className="flex justify-end space-x-2">
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+          {editCliente ? 'Atualizar' : 'Adicionar'}
         </button>
-        <button
-          type="button"
-          onClick={onCancelEdit}
-          className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition w-full sm:w-auto"
-        >
+        <button type="button" onClick={onCancelEdit} className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
           Cancelar
         </button>
       </div>

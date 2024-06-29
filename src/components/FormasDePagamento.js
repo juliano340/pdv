@@ -90,19 +90,19 @@ const FormasDePagamento = () => {
                     </>
                   )}
                 </div>
-                <div>
+                <div className="flex space-x-2">
                   <button
                     onClick={() => {
                       setEditForma(forma);
                       setShowForm(true);
                     }}
-                    className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                    className="bg-[#4c5b6e] text-white px-4 py-2 rounded-lg hover:bg-[#616f83] transition w-full sm:w-auto"
                   >
                     Editar
                   </button>
                   <button
                     onClick={() => handleDeleteForma(forma.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
+                    className="bg-[#ff003d] text-white px-4 py-2 rounded-lg hover:bg-red-400 transition w-full sm:w-auto"
                   >
                     Excluir
                   </button>
