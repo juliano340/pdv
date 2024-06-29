@@ -92,9 +92,9 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
   return (
     <div className="flex flex-col h-screen bg-[#0e1d2d] text-white p-4 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-4">
-        <Link href="/" legacyBehavior>
-          <a className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Voltar</a>
-        </Link>
+      <Link href="/" legacyBehavior>
+            <a className="bg-[#233243] text-white px-4 py-2 rounded-lg hover:bg-[#384658] transition">Voltar</a>
+          </Link>
         <button
           onClick={handleNewProdutoClick}
           className="bg-[#4c5b6e] text-white px-4 py-2 rounded-lg hover:bg-[#616f83] transition"

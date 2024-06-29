@@ -1,26 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ProdutoList from '../components/ProdutoList';
 
 const Produtos = () => {
-  const initialProdutos = [
-    { id: 1, nome: 'Produto A', descricao: 'Descrição do Produto A', preco: 100, estoque: 50 },
-    { id: 2, nome: 'Produto B', descricao: 'Descrição do Produto B', preco: 200, estoque: 30 },
-    // Adicione mais produtos conforme necessário
-  ];
+  const [produtos, setProdutos] = useState([]);
 
-  const [produtos, setProdutos] = useState(initialProdutos);
+  useEffect(() => {
+    // Carregar produtos do localStorage ao montar o componente
+    const storedProdutos = localStorage.getItem('produtos');
+    if (storedProdutos) {
+      setProdutos(JSON.parse(storedProdutos));
+    }
+  }, []);
 
   const handleAddProduto = (novoProduto) => {
-    setProdutos([...produtos, novoProduto]);
+    const updatedProdutos = [...produtos, novoProduto];
+    setProdutos(updatedProdutos);
+    localStorage.setItem('produtos', JSON.stringify(updatedProdutos));
   };
 
   const handleEditProduto = (produtoEditado) => {
-    setProdutos(produtos.map(produto => (produto.id === produtoEditado.id ? produtoEditado : produto)));
+    const updatedProdutos = produtos.map(produto => (produto.id === produtoEditado.id ? produtoEditado : produto));
+    setProdutos(updatedProdutos);
+    localStorage.setItem('produtos', JSON.stringify(updatedProdutos));
   };
 
   const handleDeleteProduto = (id) => {
-    setProdutos(produtos.filter(produto => produto.id !== id));
+    const updatedProdutos = produtos.filter(produto => produto.id !== id);
+    setProdutos(updatedProdutos);
+    localStorage.setItem('produtos', JSON.stringify(updatedProdutos));
   };
 
   return (
