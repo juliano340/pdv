@@ -55,7 +55,7 @@ const FormasDePagamento = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="mt-4 rounded-lg shadow-lg">
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-2">
