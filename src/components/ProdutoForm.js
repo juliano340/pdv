@@ -67,7 +67,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
   return (
     <form
       onSubmit={handleSubmit}
-      className={`p-4 m-4 shadow rounded-lg ${editProduto ? 'bg-[#4c5b6e]' : 'bg-[#384658]'} w-full max-w-4xl mx-auto`}
+      className={`p-4 shadow rounded-lg ${editProduto ? 'bg-[#4c5b6e]' : 'bg-[#384658]'} w-full max-w-4xl mx-auto`}
     >
       <h3 className="text-xl font-bold mb-4 text-white">{editProduto ? 'Editar Produto' : 'Adicionar Produto'}</h3>
       <div className="mb-4">
@@ -81,7 +81,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
               setHighlightFields((prev) => ({ ...prev, nome: false }));
             }
           }}
-          className={`mt-1 p-2 border ${highlightFields.nome ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full`}
+          className={`mt-1 p-2 border ${highlightFields.nome ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full text-black`}
         />
       </div>
       <div className="mb-4">
@@ -94,7 +94,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
               setHighlightFields((prev) => ({ ...prev, descricao: false }));
             }
           }}
-          className={`mt-1 p-2 border ${highlightFields.descricao ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full`}
+          className={`mt-1 p-2 border ${highlightFields.descricao ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full text-black`}
         />
       </div>
       <div className="mb-4">
@@ -108,7 +108,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
               setHighlightFields((prev) => ({ ...prev, preco: false }));
             }
           }}
-          className={`mt-1 p-2 border ${highlightFields.preco ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full`}
+          className={`mt-1 p-2 border ${highlightFields.preco ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full text-black`}
         />
       </div>
       <div className="mb-4">
@@ -122,7 +122,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
               setHighlightFields((prev) => ({ ...prev, estoque: false }));
             }
           }}
-          className={`mt-1 p-2 border ${highlightFields.estoque ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full`}
+          className={`mt-1 p-2 border ${highlightFields.estoque ? 'border-red-500' : 'border-gray-300'} rounded-lg w-full text-black`}
         />
       </div>
       {error && <p className="text-red-500 mb-4">{error}</p>}
