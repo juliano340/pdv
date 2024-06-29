@@ -1,33 +1,23 @@
 import Link from 'next/link';
 
-const HomePage = () => {
+const Home = () => {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">PDV/CAIXA</h1>
-      <ul className="list-disc pl-5">
-        <li className="mb-2">
-          <Link href="/nova-venda">
-            Iniciar Nova Venda
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link href="/clientes">
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Sistema de Gestão</h1>
+      <div className="space-y-4">
+        <Link href="/clientes" legacyBehavior>
+          <a className="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
             Gerenciar Clientes
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link href="/produtos">
+          </a>
+        </Link>
+        <Link href="/produtos" legacyBehavior>
+          <a className="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
             Gerenciar Produtos
-          </Link>
-        </li>
-        <li className="mb-2">
-          <Link href="/pagamento">
-            Gerenciar Formas de Pagamento
-          </Link>
-        </li>
-      </ul>
+          </a>
+        </Link>
+      </div>
     </div>
   );
 };
 
-export default HomePage;
+export default Home;
