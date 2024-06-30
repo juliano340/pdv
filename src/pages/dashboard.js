@@ -47,7 +47,7 @@ const Dashboard = () => {
       acc[hora] = (acc[hora] || 0) + venda.total;
       return acc;
     }, {});
-    console.log('Vendas Hoje:', vendasHoje);
+    
     setVendasHoje(vendasHoje);
 
     // Distribuição das Formas de Pagamento
