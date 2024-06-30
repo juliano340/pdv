@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { FaEye, FaArrowLeft } from 'react-icons/fa';
+import { FaEye, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
-  const [vendasList, setVendasList] = useState([]);
+  const [vendasList, setVendasList] = useState(vendas);
   const [detalheVenda, setDetalheVenda] = useState(null);
 
   useEffect(() => {
@@ -33,8 +35,16 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
     setDetalheVenda(null);
   };
 
+  const handleExcluirVenda = (id) => {
+    const novasVendas = vendasList.filter(venda => venda.id !== id);
+    setVendasList(novasVendas);
+    localStorage.setItem('vendas', JSON.stringify(novasVendas));
+    toast.success('Venda excluída com sucesso!');
+  };
+
   return (
     <div className="relative p-4 bg-white rounded-lg shadow-lg overflow-x-auto">
+      <ToastContainer />
       <h2 className="text-xl font-bold mb-4">Vendas Realizadas</h2>
       {vendasList.length === 0 ? (
         <p className="text-gray-700">Nenhuma venda realizada até o momento.</p>
@@ -56,12 +66,20 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
                   <td className="py-2 px-4 border-b text-left">{venda.data}</td>
                   <td className="py-2 px-4 border-b text-left">R$ {venda.total.toFixed(2)}</td>
                   <td className="py-2 px-4 border-b text-center">
-                    <button
-                      onClick={() => handleVerDetalhes(venda)}
-                      className="text-blue-500 hover:text-blue-700 transition"
-                    >
-                      <FaEye />
-                    </button>
+                    <div className="flex justify-center space-x-2">
+                      <button
+                        onClick={() => handleVerDetalhes(venda)}
+                        className="text-blue-500 hover:text-blue-700 transition"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        onClick={() => handleExcluirVenda(venda.id)}
+                        className="text-red-500 hover:text-red-700 transition"
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -92,7 +110,7 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
                   <p className="font-medium">Formas de Pagamento:</p>
                   <ul className="list-disc list-inside">
                     {detalheVenda.formasSelecionadas.map(forma => (
-                      <li key={forma.id}>
+                      <li key={`${forma.id}-${forma.valor}`}>
                         {obterFormaPagamento(forma.id)} - R$ {Number(forma.valor).toFixed(2)} {forma.tipo === 'CARTÃO' ? `(${forma.bandeira}, ${forma.cartaoTipo}, ${forma.permiteParcelamento ? `${forma.parcelas}x` : ''})` : ''}
                       </li>
                     ))}
@@ -120,5 +138,23 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
     </div>
   );
 };
+
+// Função para carregar os dados no servidor a cada requisição
+export async function getServerSideProps() {
+  // Carregar dados do localStorage (em um cenário real, você carregaria de um banco de dados)
+  const vendas = JSON.parse(localStorage.getItem('vendas')) || [];
+  const clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+  const produtos = JSON.parse(localStorage.getItem('produtos')) || [];
+  const formasDePagamento = JSON.parse(localStorage.getItem('formasDePagamento')) || [];
+
+  return {
+    props: {
+      vendas,
+      clientes,
+      produtos,
+      formasDePagamento,
+    },
+  };
+}
 
 export default ListaDeVendas;
