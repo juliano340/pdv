@@ -31,21 +31,26 @@ Siga os passos abaixo para instalar e executar o projeto localmente.
 1. Clone o repositório:
    
    git clone https://github.com/juliano340/pdv.git
+   
    cd pdv
 
-2. Instale as dependências:
+3. Instale as dependências:
 
     npm install
+   
     ou
+   
     yarn install
 
-3.  Inicie o servidor de desenvolvimento:
+5.  Inicie o servidor de desenvolvimento:
 
     npm run dev
+    
     ou
+
     yarn dev
 
-4. Abra o navegador e acesse http://localhost:3000.
+7. Abra o navegador e acesse http://localhost:3000.
 
 ## Uso
 
