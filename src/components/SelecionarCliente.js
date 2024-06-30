@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 const SelecionarCliente = ({ clientes, clienteId, setClienteId, clienteSelecionado, setClienteSelecionado, onNext }) => {
   const [searchTermCliente, setSearchTermCliente] = useState('');
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   useEffect(() => {
     if (clienteId && !clienteSelecionado) {
@@ -22,11 +23,24 @@ const SelecionarCliente = ({ clientes, clienteId, setClienteId, clienteSeleciona
     setClienteId(cliente.id);
     setClienteSelecionado(cliente);
     setSearchTermCliente('');
+    setFocusedIndex(-1);
   };
 
   const handleRemoverCliente = () => {
     setClienteId('');
     setClienteSelecionado(null);
+  };
+
+  const handleKeyDown = (e) => {
+    if (filteredClientes.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      setFocusedIndex((prevIndex) => (prevIndex + 1) % filteredClientes.length);
+    } else if (e.key === 'ArrowUp') {
+      setFocusedIndex((prevIndex) => (prevIndex - 1 + filteredClientes.length) % filteredClientes.length);
+    } else if (e.key === 'Enter' && focusedIndex !== -1) {
+      handleSelecionarCliente(filteredClientes[focusedIndex]);
+    }
   };
 
   return (
@@ -48,6 +62,7 @@ const SelecionarCliente = ({ clientes, clienteId, setClienteId, clienteSeleciona
             type="text"
             value={searchTermCliente}
             onChange={(e) => setSearchTermCliente(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Digite nome, email ou telefone"
             className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
           />
@@ -56,10 +71,10 @@ const SelecionarCliente = ({ clientes, clienteId, setClienteId, clienteSeleciona
               {filteredClientes.length === 0 ? (
                 <li className="p-2 text-gray-700">Nenhum cliente encontrado.</li>
               ) : (
-                filteredClientes.map(cliente => (
+                filteredClientes.map((cliente, index) => (
                   <li
                     key={cliente.id}
-                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    className={`p-2 hover:bg-gray-200 cursor-pointer ${index === focusedIndex ? 'bg-gray-200' : ''}`}
                     onClick={() => handleSelecionarCliente(cliente)}
                   >
                     {cliente.nome} - {cliente.email} - {cliente.telefone}
