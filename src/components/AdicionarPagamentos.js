@@ -14,16 +14,15 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
   }, [formasSelecionadas]);
 
   const handleAdicionarForma = () => {
+    const valorFormaFloat = parseFloat(valorForma);
+
     if (!formaDePagamento || !valorForma) {
       toast.error('Por favor, selecione uma forma de pagamento e insira o valor.');
       return;
     }
 
-    const valorFloat = parseFloat(valorForma);
-    const valorRestante = total - valorPago;
-
-    if (valorFloat > valorRestante) {
-      toast.error('O valor da forma de pagamento não pode exceder o valor restante.');
+    if (valorFormaFloat > (total - valorPago)) {
+      toast.error('O valor inserido excede o valor total a pagar.');
       return;
     }
 
@@ -34,13 +33,13 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
     }
 
     const novaForma = {
-      id: forma.id,
+      id: `${forma.id}-${Date.now()}`,
       tipo: forma.tipo,
       bandeira: forma.bandeira,
       cartaoTipo: forma.cartaoTipo,
       permiteParcelamento: forma.permiteParcelamento,
       maxParcelas: forma.maxParcelas,
-      valor: valorFloat,
+      valor: valorFormaFloat,
       parcelas: forma.tipo === 'CARTÃO' && forma.cartaoTipo === 'crédito' && forma.permiteParcelamento ? parcelas : 1,
     };
 
@@ -52,7 +51,8 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
   };
 
   const handleRemoverForma = (formaId) => {
-    setFormasSelecionadas(formasSelecionadas.filter(forma => forma.id !== formaId));
+    const novasFormas = formasSelecionadas.filter(forma => forma.id !== formaId);
+    setFormasSelecionadas(novasFormas);
   };
 
   const handleFormaDePagamentoChange = (e) => {
@@ -80,17 +80,6 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
           </option>
         ))}
       </select>
-      <div className="mt-2">
-        <label className="block text-sm font-medium text-gray-700">Valor:</label>
-        <input
-          type="number"
-          min="0.01"
-          step="0.01"
-          value={valorForma}
-          onChange={(e) => setValorForma(e.target.value)}
-          className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-        />
-      </div>
       {formaPagamentoDetalhes && formaPagamentoDetalhes.cartaoTipo === 'crédito' && formaPagamentoDetalhes.permiteParcelamento && (
         <div className="mt-2">
           <label className="block text-sm font-medium text-gray-700">Número de Parcelas:</label>
@@ -105,20 +94,31 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
           </select>
         </div>
       )}
-      <button
-        onClick={handleAdicionarForma}
-        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-      >
-        Adicionar Forma de Pagamento
-      </button>
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-gray-700">Valor:</label>
+        <input
+          type="number"
+          min="0.01"
+          step="0.01"
+          value={valorForma}
+          onChange={(e) => setValorForma(e.target.value)}
+          className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
+        />
+        <button
+          onClick={handleAdicionarForma}
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        >
+          Adicionar Forma de Pagamento
+        </button>
+      </div>
       <div className="mt-4">
         <label className="block text-sm font-medium text-gray-700">Formas de Pagamento Selecionadas:</label>
         {formasSelecionadas.length === 0 ? (
           <p className="text-gray-700">Nenhuma forma de pagamento selecionada.</p>
         ) : (
           <ul className="divide-y divide-gray-200">
-            {formasSelecionadas.map(forma => (
-              <li key={`${forma.id}-${forma.valor}-${forma.parcelas}`} className="py-4 flex justify-between items-center">
+            {formasSelecionadas.map((forma, index) => (
+              <li key={`${forma.id}-${index}`} className="py-4 flex justify-between items-center">
                 <div>
                   <p className="text-lg font-medium text-gray-900">{forma.tipo}</p>
                   {forma.tipo === 'CARTÃO' && (
