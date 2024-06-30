@@ -44,7 +44,7 @@ const Home = () => {
               <p className="text-gray-300">Acesse para adicionar, editar ou remover formas de pagamento.</p>
             </a>
           </Link>
-          <Link href="/vendas" legacyBehavior>
+          <Link href="/visualizar-vendas" legacyBehavior>
             <a className="block p-6 bg-[#233243] rounded-lg shadow-lg hover:bg-[#4c5b6e] transition">
               <div className="flex items-center mb-2">
                 <FontAwesomeIcon icon={faReceipt} className="text-white mr-2" size="lg" />

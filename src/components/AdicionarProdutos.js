@@ -47,7 +47,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
 
   return (
     <div>
-      {/* <label className="block text-sm font-medium text-gray-700">Produto:</label> */}
+      <label className="block text-sm font-medium text-gray-700">Produtos:</label>
       <input
         type="text"
         value={searchTermProduto}
