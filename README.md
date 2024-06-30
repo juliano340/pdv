@@ -1,8 +1,10 @@
 # Sistema de Gestão de Vendas
 
-[image](https://github.com/juliano340/pdv/assets/87342139/d0368bd4-2c46-4fd9-88a4-f4720c7632ea)
+![image](https://github.com/juliano340/pdv/assets/87342139/d0368bd4-2c46-4fd9-88a4-f4720c7632ea)
 
 Este é um projeto de Sistema de Gestão de Vendas desenvolvido em Next.js. O sistema permite gerenciar clientes, produtos, formas de pagamento e realizar vendas rápidas. Além disso, ele possui um dashboard para visualizar os principais indicadores de vendas.
+
+Você pode acessar o sistema em produção no link: https://pdv-juliano340s-projects.vercel.app/
 
 ## Visão Geral
 
