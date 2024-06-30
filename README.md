@@ -1,40 +1,106 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Sistema de Gestão de Vendas
 
-## Getting Started
+[image](https://github.com/juliano340/pdv/assets/87342139/d0368bd4-2c46-4fd9-88a4-f4720c7632ea)
 
-First, run the development server:
+Este é um projeto de Sistema de Gestão de Vendas desenvolvido em Next.js. O sistema permite gerenciar clientes, produtos, formas de pagamento e realizar vendas rápidas. Além disso, ele possui um dashboard para visualizar os principais indicadores de vendas.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Visão Geral
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O Sistema de Gestão de Vendas é uma aplicação web que permite:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Adicionar, editar e remover clientes.
+- Adicionar, editar e remover produtos.
+- Adicionar, editar e remover formas de pagamento.
+- Realizar vendas rápidas com seleção de cliente, produtos e formas de pagamento.
+- Visualizar vendas realizadas.
+- Dashboard com indicadores de vendas.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Instalação
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Siga os passos abaixo para instalar e executar o projeto localmente.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Pré-requisitos
 
-## Learn More
+- Node.js (versão 14 ou superior)
+- npm ou yarn
 
-To learn more about Next.js, take a look at the following resources:
+### Passos para instalação
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone o repositório:
+   
+   git clone https://github.com/juliano340/pdv.git
+   cd pdv
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Instale as dependências:
 
-## Deploy on Vercel
+    npm install
+    # ou
+    yarn install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3.  Inicie o servidor de desenvolvimento:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    npm run dev
+    # ou
+    yarn dev
+
+4. Abra o navegador e acesse http://localhost:3000.
+
+## Uso
+
+### Gerenciamento de Clientes
+
+- Navegue até a página de gerenciamento de clientes.
+- Adicione, edite ou remova clientes conforme necessário.
+
+### Gerenciamento de Produtos
+
+- Navegue até a página de gerenciamento de produtos.
+- Adicione, edite ou remova produtos conforme necessário.
+
+### Gerenciamento de Formas de Pagamento
+
+- Navegue até a página de gerenciamento de formas de pagamento.
+- Adicione, edite ou remova formas de pagamento conforme necessário.
+
+### Realizar Venda Rápida
+
+- Navegue até a página de venda rápida.
+- Selecione um cliente.
+- Adicione produtos à venda.
+- Selecione as formas de pagamento.
+- Conclua a venda.
+
+### Visualizar Vendas
+
+- Navegue até a página de visualização de vendas.
+- Veja detalhes das vendas realizadas.
+- Exclua vendas, se necessário.
+
+### Dashboard
+
+- Navegue até a página de dashboard.
+- Veja os principais indicadores de vendas, como vendas por período, formas de pagamento, produtos mais vendidos e clientes que mais compraram.
+
+## Funcionalidades Principais
+
+- **Responsividade:** A aplicação é responsiva e pode ser usada em dispositivos móveis.
+- **Validação de Formulários:** Campos obrigatórios são validados antes do envio.
+- **Confirmação de Exclusão:** Antes de excluir um registro, uma confirmação é solicitada.
+- **Navegação por Teclas:** Navegação melhorada para seleção de clientes e produtos usando as teclas do teclado.
+
+## Tecnologias Utilizadas
+
+- **Next.js:** Framework React para desenvolvimento de aplicações web.
+- **React:** Biblioteca JavaScript para construção de interfaces de usuário.
+- **Tailwind CSS:** Framework de CSS para estilização.
+- **react-toastify:** Biblioteca para exibição de notificações.
+- **react-confirm-alert:** Biblioteca para exibição de caixas de diálogo de confirmação.
+- **Chart.js e react-chartjs-2:** Bibliotecas para criação de gráficos no dashboard.
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+
+## Licença
+
+Este projeto está licenciado sob a MIT License.
