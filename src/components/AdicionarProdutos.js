@@ -1,13 +1,26 @@
 import { useState, useEffect } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, onNext }) => {
   const [searchTermProduto, setSearchTermProduto] = useState('');
   const [subtotal, setSubtotal] = useState(0);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     calcularSubtotal();
   }, [itensVenda]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const calcularSubtotal = () => {
     const total = itensVenda.reduce((acc, item) => {
@@ -142,12 +155,21 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleRemoverProduto(item.produtoId)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                  >
-                    Remover
-                  </button>
+                  {isMobile ? (
+                    <button
+                      onClick={() => handleRemoverProduto(item.produtoId)}
+                      className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleRemoverProduto(item.produtoId)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                    >
+                      Remover
+                    </button>
+                  )}
                 </li>
               );
             })}
