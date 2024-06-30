@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { FaEye } from 'react-icons/fa';
 
 const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   const [vendasList, setVendasList] = useState([]);
+  const [detalheVenda, setDetalheVenda] = useState(null);
 
   useEffect(() => {
     setVendasList(vendas);
@@ -22,38 +24,92 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
     return forma ? forma.tipo : 'Forma de pagamento não encontrada';
   };
 
+  const handleVerDetalhes = (venda) => {
+    setDetalheVenda(venda);
+  };
+
+  const fecharDetalhes = () => {
+    setDetalheVenda(null);
+  };
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
       <h2 className="text-xl font-bold mb-4">Vendas Realizadas</h2>
       {vendasList.length === 0 ? (
         <p className="text-gray-700">Nenhuma venda realizada até o momento.</p>
       ) : (
-        <ul className="divide-y divide-gray-200">
-          {vendasList.map(venda => (
-            <li key={venda.id} className="py-4">
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-lg font-bold">{obterNomeCliente(venda.clienteId)}</p>
-                <p>{venda.data}</p>
+        <>
+          <table className="min-w-full bg-white border">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Cliente</th>
+                <th className="py-2 px-4 border-b">Data</th>
+                <th className="py-2 px-4 border-b">Total</th>
+                <th className="py-2 px-4 border-b">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vendasList.map(venda => (
+                <tr key={venda.id}>
+                  <td className="py-2 px-4 border-b">{obterNomeCliente(venda.clienteId)}</td>
+                  <td className="py-2 px-4 border-b">{venda.data}</td>
+                  <td className="py-2 px-4 border-b">R$ {venda.total.toFixed(2)}</td>
+                  <td className="py-2 px-4 border-b text-center">
+                    <button
+                      onClick={() => handleVerDetalhes(venda)}
+                      className="text-blue-500 hover:text-blue-700 transition"
+                    >
+                      <FaEye />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {detalheVenda && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+              <div className="bg-white p-6 rounded-lg w-full max-w-lg mx-auto">
+                <h2 className="text-xl font-bold mb-4">Detalhes da Venda</h2>
+                <div className="mb-2">
+                  <p className="font-medium">Cliente: {obterNomeCliente(detalheVenda.clienteId)}</p>
+                </div>
+                <div className="mb-2">
+                  <p className="font-medium">Data: {detalheVenda.data}</p>
+                </div>
+                <div className="mb-2">
+                  <p className="font-medium">Produtos:</p>
+                  <ul className="list-disc list-inside">
+                    {detalheVenda.itensVenda.map(item => (
+                      <li key={item.produtoId}>
+                        {obterNomeProduto(item.produtoId)} - {item.quantidade}x R$ {Number(item.preco).toFixed(2)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-2">
+                  <p className="font-medium">Formas de Pagamento:</p>
+                  <ul className="list-disc list-inside">
+                    {detalheVenda.formasSelecionadas.map(forma => (
+                      <li key={forma.id}>
+                        {obterFormaPagamento(forma.id)} - R$ {Number(forma.valor).toFixed(2)} {forma.tipo === 'CARTÃO' ? `(${forma.bandeira}, ${forma.cartaoTipo}, ${forma.permiteParcelamento ? `${forma.parcelas}x` : ''})` : ''}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-2">
+                  <p className="font-bold">Total: R$ {Number(detalheVenda.total).toFixed(2)}</p>
+                </div>
+                <button
+                  onClick={fecharDetalhes}
+                  className="mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
+                >
+                  Fechar
+                </button>
               </div>
-              <div className="mb-2">
-                <p className="font-medium">Produtos:</p>
-                <ul className="list-disc list-inside">
-                  {venda.itensVenda.map(item => (
-                    <li key={item.produtoId}>
-                      {obterNomeProduto(item.produtoId)} - {item.quantidade}x R$ {item.preco}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="mb-2">
-                <p className="font-medium">Forma de Pagamento: {obterFormaPagamento(venda.formaDePagamento)}</p>
-              </div>
-              <div className="mb-2">
-                <p className="font-bold">Total: R$ {venda.total}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

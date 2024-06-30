@@ -108,7 +108,8 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
           </ul>
         )}
         <div className="mt-4">
-          <h3 className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</h3>
+        {(isNaN(subtotal.toFixed(2))) ? <p className="text-lg font-bold">Subtotal: R$ 0  </p> : <p className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</p>}
+          
         </div>
       </div>
       <div className="flex justify-between mt-4">
