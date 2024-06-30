@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaArrowLeft } from 'react-icons/fa';
+import Link from 'next/link';
 
 const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   const [vendasList, setVendasList] = useState([]);
@@ -33,7 +34,7 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg overflow-x-auto">
+    <div className="relative p-4 bg-white rounded-lg shadow-lg overflow-x-auto">
       <h2 className="text-xl font-bold mb-4">Vendas Realizadas</h2>
       {vendasList.length === 0 ? (
         <p className="text-gray-700">Nenhuma venda realizada até o momento.</p>
@@ -111,6 +112,11 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
           )}
         </>
       )}
+      <Link href="/" legacyBehavior>
+        <a className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
+          <FaArrowLeft size="1.5em" />
+        </a>
+      </Link>
     </div>
   );
 };
