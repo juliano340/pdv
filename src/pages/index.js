@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faBox, faCreditCard, faShoppingCart, faReceipt } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faBox, faCreditCard, faShoppingCart, faReceipt, faChartBar } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
   return (
@@ -51,6 +51,15 @@ const Home = () => {
                 <h2 className="text-xl font-bold text-white">Visualizar Vendas</h2>
               </div>
               <p className="text-gray-300">Acesse para visualizar todas as vendas realizadas.</p>
+            </a>
+          </Link>
+          <Link href="/dashboard" legacyBehavior>
+            <a className="block p-6 bg-[#233243] rounded-lg shadow-lg hover:bg-[#4c5b6e] transition">
+              <div className="flex items-center mb-2">
+                <FontAwesomeIcon icon={faChartBar} className="text-white mr-2" size="lg" />
+                <h2 className="text-xl font-bold text-white">Dashboard</h2>
+              </div>
+              <p className="text-gray-300">Acesse para visualizar o dashboard de vendas.</p>
             </a>
           </Link>
         </div>

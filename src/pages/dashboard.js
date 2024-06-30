@@ -38,8 +38,11 @@ const Dashboard = () => {
 
     // Vendas por Período
     const vendasPorDia = vendas.reduce((acc, venda) => {
-      const data = new Date(venda.data).toLocaleDateString();
-      acc[data] = (acc[data] || 0) + venda.total;
+      const data = new Date(venda.data);
+      if (!isNaN(data.getTime())) {
+        const mesAno = `${String(data.getMonth() + 1).padStart(2, '0')}/${data.getFullYear()}`;
+        acc[mesAno] = (acc[mesAno] || 0) + venda.total;
+      }
       return acc;
     }, {});
     setVendasPorPeriodo(vendasPorDia);
@@ -57,7 +60,9 @@ const Dashboard = () => {
     const produtosCount = vendas.reduce((acc, venda) => {
       venda.itensVenda.forEach(item => {
         const produto = produtos.find(p => p.id === item.produtoId);
-        acc[produto.nome] = (acc[produto.nome] || 0) + item.quantidade;
+        if (produto) {
+          acc[produto.nome] = (acc[produto.nome] || 0) + item.quantidade;
+        }
       });
       return acc;
     }, {});
@@ -66,10 +71,68 @@ const Dashboard = () => {
     // Clientes que mais compraram
     const clientesCount = vendas.reduce((acc, venda) => {
       const cliente = clientes.find(c => c.id === venda.clienteId);
-      acc[cliente.nome] = (acc[cliente.nome] || 0) + venda.total;
+      if (cliente) {
+        acc[cliente.nome] = (acc[cliente.nome] || 0) + venda.total;
+      }
       return acc;
     }, {});
     setClientesMaisCompraram(clientesCount);
+  };
+
+  const dataVendasPorPeriodo = {
+    labels: Object.keys(vendasPorPeriodo),
+    datasets: [
+      {
+        label: 'Vendas',
+        data: Object.values(vendasPorPeriodo),
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const dataFormasDePagamento = {
+    labels: Object.keys(formasDePagamentoData),
+    datasets: [
+      {
+        data: Object.values(formasDePagamentoData),
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#4BC0C0',
+          '#9966FF',
+          '#FF9F40',
+        ],
+      },
+    ],
+  };
+
+  const dataProdutosMaisVendidos = {
+    labels: Object.keys(produtosMaisVendidos),
+    datasets: [
+      {
+        label: 'Quantidade Vendida',
+        data: Object.values(produtosMaisVendidos),
+        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const dataClientesMaisCompraram = {
+    labels: Object.keys(clientesMaisCompraram),
+    datasets: [
+      {
+        label: 'Total Gasto',
+        data: Object.values(clientesMaisCompraram),
+        backgroundColor: 'rgba(255, 159, 64, 0.6)',
+        borderColor: 'rgba(255, 159, 64, 1)',
+        borderWidth: 1,
+      },
+    ],
   };
 
   return (
@@ -79,88 +142,28 @@ const Dashboard = () => {
         <h2 className="text-xl font-bold">Total de Vendas: R$ {totalVendas.toFixed(2)}</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="mb-4 h-96">
-          <h2 className="text-xl font-bold">Vendas por Período</h2>
-          <div className="h-full">
-            <Bar
-              data={{
-                labels: Object.keys(vendasPorPeriodo),
-                datasets: [
-                  {
-                    label: 'Vendas',
-                    data: Object.values(vendasPorPeriodo),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1,
-                  },
-                ],
-              }}
-              options={{ responsive: true, maintainAspectRatio: false }}
-            />
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h2 className="text-xl font-bold mb-2">Vendas por Período</h2>
+          <div className="h-64">
+            <Bar data={dataVendasPorPeriodo} options={{ responsive: true, maintainAspectRatio: false }} />
           </div>
         </div>
-        <div className="mb-4 h-96">
-          <h2 className="text-xl font-bold">Formas de Pagamento</h2>
-          <div className="h-full">
-            <Pie
-              data={{
-                labels: Object.keys(formasDePagamentoData),
-                datasets: [
-                  {
-                    data: Object.values(formasDePagamentoData),
-                    backgroundColor: [
-                      '#FF6384',
-                      '#36A2EB',
-                      '#FFCE56',
-                      '#4BC0C0',
-                      '#9966FF',
-                      '#FF9F40',
-                    ],
-                  },
-                ],
-              }}
-              options={{ responsive: true, maintainAspectRatio: false }}
-            />
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h2 className="text-xl font-bold mb-2">Formas de Pagamento</h2>
+          <div className="h-64">
+            <Pie data={dataFormasDePagamento} options={{ responsive: true, maintainAspectRatio: false }} />
           </div>
         </div>
-        <div className="mb-4 h-96">
-          <h2 className="text-xl font-bold">Produtos Mais Vendidos</h2>
-          <div className="h-full">
-            <Bar
-              data={{
-                labels: Object.keys(produtosMaisVendidos),
-                datasets: [
-                  {
-                    label: 'Quantidade Vendida',
-                    data: Object.values(produtosMaisVendidos),
-                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1,
-                  },
-                ],
-              }}
-              options={{ responsive: true, maintainAspectRatio: false }}
-            />
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h2 className="text-xl font-bold mb-2">Produtos Mais Vendidos</h2>
+          <div className="h-64">
+            <Bar data={dataProdutosMaisVendidos} options={{ responsive: true, maintainAspectRatio: false }} />
           </div>
         </div>
-        <div className="mb-4 h-96">
-          <h2 className="text-xl font-bold">Clientes que Mais Compraram</h2>
-          <div className="h-full">
-            <Bar
-              data={{
-                labels: Object.keys(clientesMaisCompraram),
-                datasets: [
-                  {
-                    label: 'Total Gasto',
-                    data: Object.values(clientesMaisCompraram),
-                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1,
-                  },
-                ],
-              }}
-              options={{ responsive: true, maintainAspectRatio: false }}
-            />
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h2 className="text-xl font-bold mb-2">Clientes que Mais Compraram</h2>
+          <div className="h-64">
+            <Bar data={dataClientesMaisCompraram} options={{ responsive: true, maintainAspectRatio: false }} />
           </div>
         </div>
       </div>
