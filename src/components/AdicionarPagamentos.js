@@ -19,10 +19,15 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
       return;
     }
 
-    console.log('Forma de pagamento selecionada:', formaDePagamento);
+    const valorFloat = parseFloat(valorForma);
+    const valorRestante = total - valorPago;
+
+    if (valorFloat > valorRestante) {
+      toast.error('O valor da forma de pagamento não pode exceder o valor restante.');
+      return;
+    }
+
     const forma = formasDePagamento.find(f => String(f.id) === String(formaDePagamento));
-    console.log('Formas de pagamento disponíveis:', formasDePagamento);
-    console.log('Forma encontrada:', forma);
     if (!forma) {
       toast.error('Forma de pagamento não encontrada.');
       return;
@@ -35,11 +40,9 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
       cartaoTipo: forma.cartaoTipo,
       permiteParcelamento: forma.permiteParcelamento,
       maxParcelas: forma.maxParcelas,
-      valor: parseFloat(valorForma),
+      valor: valorFloat,
       parcelas: forma.tipo === 'CARTÃO' && forma.cartaoTipo === 'crédito' && forma.permiteParcelamento ? parcelas : 1,
     };
-
-    console.log('Adicionando nova forma de pagamento:', novaForma);
 
     setFormasSelecionadas([...formasSelecionadas, novaForma]);
     setFormaDePagamento('');
@@ -77,17 +80,6 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
           </option>
         ))}
       </select>
-      {/* {formaPagamentoDetalhes && (
-        <div className="mt-2">
-          <p className="text-sm font-medium text-gray-700">Bandeira: {formaPagamentoDetalhes.bandeira}</p>
-          <p className="text-sm font-medium text-gray-700">Tipo: {formaPagamentoDetalhes.cartaoTipo?.charAt(0).toUpperCase() + formaPagamentoDetalhes.cartaoTipo?.slice(1)}</p>
-          {formaPagamentoDetalhes.cartaoTipo === 'crédito' && formaPagamentoDetalhes.permiteParcelamento && (
-            <div className="mt-2">
-              <p className="text-sm font-medium text-gray-700">Máx. Parcelas: {formaPagamentoDetalhes.maxParcelas}</p>
-            </div>
-          )}
-        </div>
-      )} */}
       <div className="mt-2">
         <label className="block text-sm font-medium text-gray-700">Valor:</label>
         <input
@@ -125,33 +117,29 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
           <p className="text-gray-700">Nenhuma forma de pagamento selecionada.</p>
         ) : (
           <ul className="divide-y divide-gray-200">
-            {formasSelecionadas.map(forma => {
-              console.log('Forma de pagamento selecionada:', forma);
-              return (
-                <li key={`${forma.id}-${forma.valor}-${forma.parcelas}`} className="py-4 flex justify-between items-center">
-                  <div>
-                    <p className="text-lg font-medium text-gray-900">{forma.tipo}</p>
-                    {forma.tipo === 'CARTÃO' && (
-                      <div>
-                        <p className="text-gray-700">Bandeira: {forma.bandeira}</p>
-                        <p className="text-gray-700">Tipo: {forma.cartaoTipo?.charAt(0).toUpperCase() + forma.cartaoTipo?.slice(1)}</p>
-                        {forma.cartaoTipo === 'crédito' && forma.permiteParcelamento && (
-                          <p className="text-gray-700">Parcelas: {forma.parcelas}x</p>
-                        )}
-                      </div>
-                    )}
-                    <p className="text-gray-700">Valor: R$ {forma.valor.toFixed(2)}</p>
-                    
-                  </div>
-                  <button
-                    onClick={() => handleRemoverForma(forma.id)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-                  >
-                    Remover
-                  </button>
-                </li>
-              );
-            })}
+            {formasSelecionadas.map(forma => (
+              <li key={`${forma.id}-${forma.valor}-${forma.parcelas}`} className="py-4 flex justify-between items-center">
+                <div>
+                  <p className="text-lg font-medium text-gray-900">{forma.tipo}</p>
+                  {forma.tipo === 'CARTÃO' && (
+                    <div>
+                      <p className="text-gray-700">Bandeira: {forma.bandeira}</p>
+                      <p className="text-gray-700">Tipo: {forma.cartaoTipo?.charAt(0).toUpperCase() + forma.cartaoTipo?.slice(1)}</p>
+                      {forma.cartaoTipo === 'crédito' && forma.permiteParcelamento && (
+                        <p className="text-gray-700">Parcelas: {forma.parcelas}x</p>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-gray-700">Valor: R$ {forma.valor.toFixed(2)}</p>
+                </div>
+                <button
+                  onClick={() => handleRemoverForma(forma.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                >
+                  Remover
+                </button>
+              </li>
+            ))}
           </ul>
         )}
       </div>
