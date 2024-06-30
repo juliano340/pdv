@@ -24,8 +24,8 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
     return produto ? produto.nome : 'Produto não encontrado';
   };
 
-  const obterFormaPagamento = (formaId) => {
-    const forma = formasDePagamento.find(f => f.id === formaId);
+  const obterFormaPagamento = (formaTipo) => {
+    const forma = formasDePagamento.find(f => f.tipo === formaTipo);
     return forma ? forma.tipo : 'Forma de pagamento não encontrada';
   };
 
@@ -127,7 +127,7 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
                   <ul className="list-disc list-inside">
                     {detalheVenda.formasSelecionadas.map(forma => (
                       <li key={`${forma.id}-${forma.valor}`}>
-                        {obterFormaPagamento(forma.id)} - R$ {Number(forma.valor).toFixed(2)} {forma.tipo === 'CARTÃO' ? `(${forma.bandeira}, ${forma.cartaoTipo}, ${forma.permiteParcelamento ? `${forma.parcelas}x` : ''})` : ''}
+                        {forma.tipo} - R$ {Number(forma.valor).toFixed(2)} {forma.tipo === 'CARTÃO' ? `(${forma.bandeira}, ${forma.cartaoTipo}, ${forma.permiteParcelamento ? `${forma.parcelas}x` : ''})` : ''}
                       </li>
                     ))}
                   </ul>
