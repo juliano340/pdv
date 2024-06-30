@@ -174,7 +174,7 @@ const ProdutoList = ({ produtos, onDeleteProduto, onEditProduto, onAddProduto })
               <div className="w-full sm:w-auto flex-grow">
                 <p className="text-lg font-medium text-gray-900">{produto.nome}</p>
                 <p className="text-gray-700">{produto.descricao}</p>
-                <p className="text-gray-700">{`Preço: R$ ${produto.preco}`}</p>
+                <p className="text-gray-700">{`Preço: R$ ${parseFloat(produto.preco).toFixed(2)}`}</p>
                 <p className="text-gray-700">{`Estoque: ${produto.estoque}`}</p>
               </div>
               <div className="flex space-x-2">

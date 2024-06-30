@@ -9,7 +9,10 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
   }, [itensVenda]);
 
   const calcularSubtotal = () => {
-    const total = itensVenda.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+    const total = itensVenda.reduce((acc, item) => {
+      const preco = parseFloat(String(item.preco).replace(',', '.'));
+      return acc + (preco * item.quantidade);
+    }, 0);
     setSubtotal(total);
   };
 
@@ -66,7 +69,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
                 className="p-2 hover:bg-gray-200 cursor-pointer"
                 onClick={() => handleAdicionarProduto(produto.id)}
               >
-                {produto.nome} - R$ {produto.preco}
+                {produto.nome} - R$ {parseFloat(produto.preco).toFixed(2)}
               </li>
             ))
           )}
@@ -84,7 +87,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
                 <li key={item.produtoId} className="py-4 flex justify-between items-center">
                   <div>
                     <p className="text-lg font-medium text-gray-900">{produto.nome}</p>
-                    <p className="text-gray-700">Preço Unitário: R$ {item.preco}</p>
+                    <p className="text-gray-700">Preço Unitário: R$ {parseFloat(item.preco).toFixed(2)}</p>
                     <div className="flex items-center">
                       <label className="block text-sm font-medium text-gray-700 mr-2">Quantidade:</label>
                       <input
@@ -108,8 +111,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
           </ul>
         )}
         <div className="mt-4">
-        {(isNaN(subtotal.toFixed(2))) ? <p className="text-lg font-bold">Subtotal: R$ 0  </p> : <p className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</p>}
-          
+          <p className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</p>
         </div>
       </div>
       <div className="flex justify-between mt-4">

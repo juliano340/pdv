@@ -9,39 +9,34 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
   const [valorPago, setValorPago] = useState(0);
 
   useEffect(() => {
-    const totalPago = formasSelecionadas.reduce((acc, forma) => acc + forma.valor, 0);
+    const totalPago = formasSelecionadas.reduce((acc, forma) => acc + parseFloat(String(forma.valor).replace(',', '.')), 0);
     setValorPago(totalPago);
   }, [formasSelecionadas]);
 
   const handleAdicionarForma = () => {
-    const valorFormaFloat = parseFloat(valorForma);
-
-    if (!formaDePagamento || !valorForma) {
-      toast.error('Por favor, selecione uma forma de pagamento e insira o valor.');
+    const valorFormaFloat = parseFloat(String(valorForma).replace(',', '.'));
+    if (!formaDePagamento || !valorForma || isNaN(valorFormaFloat) || valorFormaFloat <= 0) {
+      toast.error('Por favor, selecione uma forma de pagamento e insira um valor válido.');
       return;
     }
 
-    if (valorFormaFloat > (total - valorPago)) {
-      toast.error('O valor inserido excede o valor total a pagar.');
-      return;
-    }
-
-    const forma = formasDePagamento.find(f => String(f.id) === String(formaDePagamento));
+    const forma = formasDePagamento.find(f => f.id === parseInt(formaDePagamento));
     if (!forma) {
       toast.error('Forma de pagamento não encontrada.');
       return;
     }
 
     const novaForma = {
-      id: `${forma.id}-${Date.now()}`,
-      tipo: forma.tipo,
-      bandeira: forma.bandeira,
-      cartaoTipo: forma.cartaoTipo,
-      permiteParcelamento: forma.permiteParcelamento,
-      maxParcelas: forma.maxParcelas,
+      ...forma,
       valor: valorFormaFloat,
       parcelas: forma.tipo === 'CARTÃO' && forma.cartaoTipo === 'crédito' && forma.permiteParcelamento ? parcelas : 1,
     };
+
+    const novoTotalPago = valorPago + valorFormaFloat;
+    if (novoTotalPago > total) {
+      toast.error('O valor total pago não pode ser superior ao valor da venda.');
+      return;
+    }
 
     setFormasSelecionadas([...formasSelecionadas, novaForma]);
     setFormaDePagamento('');
@@ -58,7 +53,7 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
   const handleFormaDePagamentoChange = (e) => {
     const formaId = e.target.value;
     setFormaDePagamento(formaId);
-    const forma = formasDePagamento.find(f => String(f.id) === String(formaId));
+    const forma = formasDePagamento.find(f => f.id === parseInt(formaId));
     setFormaPagamentoDetalhes(forma);
     setParcelas(1);
   };
@@ -80,45 +75,50 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
           </option>
         ))}
       </select>
-      {formaPagamentoDetalhes && formaPagamentoDetalhes.cartaoTipo === 'crédito' && formaPagamentoDetalhes.permiteParcelamento && (
+      {formaPagamentoDetalhes && (
         <div className="mt-2">
-          <label className="block text-sm font-medium text-gray-700">Número de Parcelas:</label>
-          <select
-            value={parcelas}
-            onChange={(e) => setParcelas(parseInt(e.target.value))}
-            className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-          >
-            {Array.from({ length: formaPagamentoDetalhes.maxParcelas }, (_, i) => (
-              <option key={i + 1} value={i + 1}>{i + 1}</option>
-            ))}
-          </select>
+          <p className="text-sm font-medium text-gray-700">Bandeira: {formaPagamentoDetalhes.bandeira}</p>
+          <p className="text-sm font-medium text-gray-700">Tipo: {formaPagamentoDetalhes.cartaoTipo?.charAt(0).toUpperCase() + formaPagamentoDetalhes.cartaoTipo?.slice(1)}</p>
+          {formaPagamentoDetalhes.cartaoTipo === 'crédito' && formaPagamentoDetalhes.permiteParcelamento && (
+            <div className="mt-2">
+              <p className="text-sm font-medium text-gray-700">Máx. Parcelas: {formaPagamentoDetalhes.maxParcelas}</p>
+              <label className="block text-sm font-medium text-gray-700">Número de Parcelas:</label>
+              <select
+                value={parcelas}
+                onChange={(e) => setParcelas(parseInt(e.target.value))}
+                className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
+              >
+                {Array.from({ length: formaPagamentoDetalhes.maxParcelas }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       )}
       <div className="mt-2">
         <label className="block text-sm font-medium text-gray-700">Valor:</label>
         <input
-          type="number"
-          min="0.01"
-          step="0.01"
+          type="text"
           value={valorForma}
           onChange={(e) => setValorForma(e.target.value)}
           className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
         />
-        <button
-          onClick={handleAdicionarForma}
-          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-        >
-          Adicionar Forma de Pagamento
-        </button>
       </div>
+      <button
+        onClick={handleAdicionarForma}
+        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+      >
+        Adicionar Forma de Pagamento
+      </button>
       <div className="mt-4">
         <label className="block text-sm font-medium text-gray-700">Formas de Pagamento Selecionadas:</label>
         {formasSelecionadas.length === 0 ? (
           <p className="text-gray-700">Nenhuma forma de pagamento selecionada.</p>
         ) : (
           <ul className="divide-y divide-gray-200">
-            {formasSelecionadas.map((forma, index) => (
-              <li key={`${forma.id}-${index}`} className="py-4 flex justify-between items-center">
+            {formasSelecionadas.map(forma => (
+              <li key={`${forma.id}-${forma.valor}`} className="py-4 flex justify-between items-center">
                 <div>
                   <p className="text-lg font-medium text-gray-900">{forma.tipo}</p>
                   {forma.tipo === 'CARTÃO' && (

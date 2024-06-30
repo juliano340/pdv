@@ -11,7 +11,7 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
     if (editProduto) {
       setNome(editProduto.nome);
       setDescricao(editProduto.descricao);
-      setPreco(editProduto.preco);
+      setPreco(editProduto.preco.toString().replace('.', ','));
       setEstoque(editProduto.estoque);
       setHighlightFields({ nome: false, preco: false });
     } else {
@@ -33,11 +33,13 @@ const ProdutoForm = ({ onAddProduto, onEditProduto, editProduto, onCancelEdit, h
       return;
     }
 
+    const precoFormatado = parseFloat(preco.replace(',', '.'));
+
     const novoProduto = {
       id: editProduto ? editProduto.id : Date.now(),
       nome,
       descricao,
-      preco,
+      preco: precoFormatado,
       estoque,
     };
 
