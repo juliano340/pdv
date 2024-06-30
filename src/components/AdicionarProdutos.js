@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, onNext }) => {
   const [searchTermProduto, setSearchTermProduto] = useState('');
   const [subtotal, setSubtotal] = useState(0);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
   useEffect(() => {
     calcularSubtotal();
@@ -34,6 +35,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
       setItensVenda([...itensVenda, { produtoId, quantidade: 1, preco: produto.preco }]);
     }
     setSearchTermProduto('');
+    setHighlightedIndex(-1);
   };
 
   const handleAlterarQuantidade = (produtoId, quantidade) => {
@@ -48,6 +50,20 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
     setItensVenda(itensVenda.filter(item => item.produtoId !== produtoId));
   };
 
+  const handleKeyDown = (e) => {
+    if (filteredProdutos.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      setHighlightedIndex((prevIndex) => (prevIndex + 1) % filteredProdutos.length);
+    } else if (e.key === 'ArrowUp') {
+      setHighlightedIndex((prevIndex) => (prevIndex - 1 + filteredProdutos.length) % filteredProdutos.length);
+    } else if (e.key === 'Enter') {
+      if (highlightedIndex >= 0 && highlightedIndex < filteredProdutos.length) {
+        handleAdicionarProduto(filteredProdutos[highlightedIndex].id);
+      }
+    }
+  };
+
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700">Produtos:</label>
@@ -55,6 +71,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
         type="text"
         value={searchTermProduto}
         onChange={(e) => setSearchTermProduto(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Digite o nome do produto..."
         className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
       />
@@ -63,10 +80,10 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
           {filteredProdutos.length === 0 ? (
             <li className="p-2 text-gray-700">Nenhum produto encontrado.</li>
           ) : (
-            filteredProdutos.map(produto => (
+            filteredProdutos.map((produto, index) => (
               <li
                 key={produto.id}
-                className="p-2 hover:bg-gray-200 cursor-pointer"
+                className={`p-2 hover:bg-gray-200 cursor-pointer ${index === highlightedIndex ? 'bg-gray-300' : ''}`}
                 onClick={() => handleAdicionarProduto(produto.id)}
               >
                 {produto.nome} - R$ {parseFloat(produto.preco).toFixed(2)}
