@@ -77,23 +77,9 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
       </select>
       {formaPagamentoDetalhes && (
         <div className="mt-2">
-          <p className="text-sm font-medium text-gray-700">Bandeira: {formaPagamentoDetalhes.bandeira}</p>
-          <p className="text-sm font-medium text-gray-700">Tipo: {formaPagamentoDetalhes.cartaoTipo?.charAt(0).toUpperCase() + formaPagamentoDetalhes.cartaoTipo?.slice(1)}</p>
-          {formaPagamentoDetalhes.cartaoTipo === 'crédito' && formaPagamentoDetalhes.permiteParcelamento && (
-            <div className="mt-2">
-              <p className="text-sm font-medium text-gray-700">Máx. Parcelas: {formaPagamentoDetalhes.maxParcelas}</p>
-              <label className="block text-sm font-medium text-gray-700">Número de Parcelas:</label>
-              <select
-                value={parcelas}
-                onChange={(e) => setParcelas(parseInt(e.target.value))}
-                className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-              >
-                {Array.from({ length: formaPagamentoDetalhes.maxParcelas }, (_, i) => (
-                  <option key={i + 1} value={i + 1}>{i + 1}</option>
-                ))}
-              </select>
-            </div>
-          )}
+          {/* <p className="text-sm font-medium text-gray-700">Bandeira: {formaPagamentoDetalhes.bandeira}</p> */}
+          {/* <p className="text-sm font-medium text-gray-700">Tipo: {formaPagamentoDetalhes.cartaoTipo?.charAt(0).toUpperCase() + formaPagamentoDetalhes.cartaoTipo?.slice(1)}</p> */}
+          
         </div>
       )}
       <div className="mt-2">
