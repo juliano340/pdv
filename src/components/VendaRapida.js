@@ -7,6 +7,7 @@ import AdicionarPagamentos from './AdicionarPagamentos';
 
 const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
   const [clienteId, setClienteId] = useState('');
+  const [clienteSelecionado, setClienteSelecionado] = useState(null);
   const [itensVenda, setItensVenda] = useState([]);
   const [formasSelecionadas, setFormasSelecionadas] = useState([]);
   const [total, setTotal] = useState(0);
@@ -45,6 +46,7 @@ const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
     onAddVenda(novaVenda);
     toast.success('Venda realizada com sucesso!');
     setClienteId('');
+    setClienteSelecionado(null);
     setItensVenda([]);
     setFormasSelecionadas([]);
     setTotal(0);
@@ -54,12 +56,14 @@ const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
       <ToastContainer />
-      {/* <h2 className="text-xl font-bold mb-4">Adicionar produtos:</h2> */}
+      <h2 className="text-xl font-bold mb-4">Venda Rápida</h2>
       {currentStep === 1 && (
         <SelecionarCliente
           clientes={clientes}
           clienteId={clienteId}
           setClienteId={setClienteId}
+          clienteSelecionado={clienteSelecionado}
+          setClienteSelecionado={setClienteSelecionado}
           onNext={() => setCurrentStep(2)}
         />
       )}

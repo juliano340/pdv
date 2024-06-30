@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const SelecionarCliente = ({ clientes, clienteId, setClienteId, onNext }) => {
+const SelecionarCliente = ({ clientes, clienteId, setClienteId, clienteSelecionado, setClienteSelecionado, onNext }) => {
   const [searchTermCliente, setSearchTermCliente] = useState('');
-  const [clienteSelecionado, setClienteSelecionado] = useState(null);
+
+  useEffect(() => {
+    if (clienteId && !clienteSelecionado) {
+      const cliente = clientes.find(c => c.id === clienteId);
+      if (cliente) {
+        setClienteSelecionado(cliente);
+      }
+    }
+  }, [clienteId, clienteSelecionado, clientes, setClienteSelecionado]);
 
   const filteredClientes = clientes.filter(cliente =>
     cliente.nome.toLowerCase().includes(searchTermCliente.toLowerCase()) ||
