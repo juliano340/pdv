@@ -48,7 +48,7 @@ const ClienteForm = ({ onAddCliente, onEditCliente, editCliente, onCancelEdit, h
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`p-4 shadow rounded-lg bg-gray-50 w-full ${highlightNome ? 'border border-red-500' : ''}`}>
+    <form onSubmit={handleSubmit} className={`p-4 shadow rounded-lg bg-gray-50 w-full `}>
       <h3 className="text-xl font-bold mb-4">{editCliente ? 'Editar Cliente' : 'Adicionar Cliente'}</h3>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Nome:</label>

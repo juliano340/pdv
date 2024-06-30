@@ -77,8 +77,7 @@ const AdicionarPagamentos = ({ formasDePagamento, formasSelecionadas, setFormasS
       </select>
       {formaPagamentoDetalhes && (
         <div className="mt-2">
-          {/* <p className="text-sm font-medium text-gray-700">Bandeira: {formaPagamentoDetalhes.bandeira}</p> */}
-          {/* <p className="text-sm font-medium text-gray-700">Tipo: {formaPagamentoDetalhes.cartaoTipo?.charAt(0).toUpperCase() + formaPagamentoDetalhes.cartaoTipo?.slice(1)}</p> */}
+          
           
         </div>
       )}
