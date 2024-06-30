@@ -4,6 +4,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import SelecionarCliente from './SelecionarCliente';
 import AdicionarProdutos from './AdicionarProdutos';
 import AdicionarPagamentos from './AdicionarPagamentos';
+import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
   const [clienteId, setClienteId] = useState('');
@@ -54,9 +56,17 @@ const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg">
+    <div className="p-4 bg-white rounded-lg shadow-lg relative">
       <ToastContainer />
-      <h2 className="text-xl font-bold mb-4">Venda Rápida</h2>
+      {currentStep === 1 && (
+        <h1 className="text-2xl font-bold mb-4">Etapa 1/3: Selecione o cliente</h1>
+      )}
+      {currentStep === 2 && (
+        <h1 className="text-2xl font-bold mb-4">Etapa 2/3: Adicione os produtos</h1>
+      )}
+      {currentStep === 3 && (
+        <h1 className="text-2xl font-bold mb-4">Etapa 3/3: Selecione as formas de pagamento</h1>
+      )}
       {currentStep === 1 && (
         <SelecionarCliente
           clientes={clientes}
@@ -86,6 +96,11 @@ const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
           onComplete={handleEncerrarVenda}
         />
       )}
+      <Link href="/" legacyBehavior>
+        <a className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition">
+          <FaArrowLeft size="1.5em" />
+        </a>
+      </Link>
     </div>
   );
 };
