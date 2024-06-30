@@ -42,18 +42,18 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
           <table className="min-w-full bg-white border">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b">Cliente</th>
-                <th className="py-2 px-4 border-b">Data</th>
-                <th className="py-2 px-4 border-b">Total</th>
-                <th className="py-2 px-4 border-b">Ações</th>
+                <th className="py-2 px-4 border-b text-left">Cliente</th>
+                <th className="py-2 px-4 border-b text-left">Data</th>
+                <th className="py-2 px-4 border-b text-left">Total</th>
+                <th className="py-2 px-4 border-b text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
               {vendasList.map(venda => (
                 <tr key={venda.id}>
-                  <td className="py-2 px-4 border-b">{obterNomeCliente(venda.clienteId)}</td>
-                  <td className="py-2 px-4 border-b">{venda.data}</td>
-                  <td className="py-2 px-4 border-b">R$ {venda.total.toFixed(2)}</td>
+                  <td className="py-2 px-4 border-b text-left">{obterNomeCliente(venda.clienteId)}</td>
+                  <td className="py-2 px-4 border-b text-left">{venda.data}</td>
+                  <td className="py-2 px-4 border-b text-left">R$ {venda.total.toFixed(2)}</td>
                   <td className="py-2 px-4 border-b text-center">
                     <button
                       onClick={() => handleVerDetalhes(venda)}
