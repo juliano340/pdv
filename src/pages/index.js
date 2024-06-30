@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faBox, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faBox, faCreditCard, faShoppingCart, faReceipt } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
   return (
@@ -33,6 +33,24 @@ const Home = () => {
                 <h2 className="text-xl font-bold text-white">Gerenciar Formas de Pagamento</h2>
               </div>
               <p className="text-gray-300">Acesse para adicionar, editar ou remover formas de pagamento.</p>
+            </a>
+          </Link>
+          <Link href="/venda-rapida" legacyBehavior>
+            <a className="block p-6 bg-[#233243] rounded-lg shadow-lg hover:bg-[#4c5b6e] transition">
+              <div className="flex items-center mb-2">
+                <FontAwesomeIcon icon={faShoppingCart} className="text-white mr-2" size="lg" />
+                <h2 className="text-xl font-bold text-white">Venda Rápida</h2>
+              </div>
+              <p className="text-gray-300">Acesse para realizar uma venda rápida.</p>
+            </a>
+          </Link>
+          <Link href="/visualizar-vendas" legacyBehavior>
+            <a className="block p-6 bg-[#233243] rounded-lg shadow-lg hover:bg-[#4c5b6e] transition">
+              <div className="flex items-center mb-2">
+                <FontAwesomeIcon icon={faReceipt} className="text-white mr-2" size="lg" />
+                <h2 className="text-xl font-bold text-white">Visualizar Vendas</h2>
+              </div>
+              <p className="text-gray-300">Acesse para visualizar todas as vendas realizadas.</p>
             </a>
           </Link>
         </div>
