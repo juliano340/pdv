@@ -39,9 +39,10 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
   };
 
   const handleAlterarQuantidade = (produtoId, quantidade) => {
+    const quantidadeAtualizada = parseInt(quantidade) || 1;
     setItensVenda(itensVenda.map(item =>
       item.produtoId === produtoId
-        ? { ...item, quantidade: parseInt(quantidade) }
+        ? { ...item, quantidade: Math.max(1, quantidadeAtualizada) }
         : item
     ));
   };
@@ -128,7 +129,7 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
           </ul>
         )}
         <div className="mt-4">
-          <p className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</p>
+          <p className="text-lg font-bold">Subtotal: R$ {isNaN(subtotal) ? 0 : subtotal.toFixed(2)}</p>
         </div>
       </div>
       <div className="flex justify-between mt-4">
