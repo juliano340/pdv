@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { FaEye, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   const [vendasList, setVendasList] = useState(vendas);
@@ -36,10 +38,24 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   };
 
   const handleExcluirVenda = (id) => {
-    const novasVendas = vendasList.filter(venda => venda.id !== id);
-    setVendasList(novasVendas);
-    localStorage.setItem('vendas', JSON.stringify(novasVendas));
-    toast.success('Venda excluída com sucesso!');
+    confirmAlert({
+      title: 'Confirmação de exclusão',
+      message: 'Você tem certeza que deseja excluir esta venda?',
+      buttons: [
+        {
+          label: 'Sim',
+          onClick: () => {
+            const novasVendas = vendasList.filter(venda => venda.id !== id);
+            setVendasList(novasVendas);
+            localStorage.setItem('vendas', JSON.stringify(novasVendas));
+            toast.success('Venda excluída com sucesso!');
+          },
+        },
+        {
+          label: 'Não',
+        },
+      ],
+    });
   };
 
   return (
