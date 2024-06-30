@@ -39,12 +39,20 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
   };
 
   const handleAlterarQuantidade = (produtoId, quantidade) => {
-    const quantidadeAtualizada = parseInt(quantidade) || 1;
+    const quantidadeAtualizada = Math.max(1, quantidade);
     setItensVenda(itensVenda.map(item =>
       item.produtoId === produtoId
-        ? { ...item, quantidade: Math.max(1, quantidadeAtualizada) }
+        ? { ...item, quantidade: quantidadeAtualizada }
         : item
     ));
+  };
+
+  const handleIncrementarQuantidade = (produtoId) => {
+    handleAlterarQuantidade(produtoId, itensVenda.find(item => item.produtoId === produtoId).quantidade + 1);
+  };
+
+  const handleDecrementarQuantidade = (produtoId) => {
+    handleAlterarQuantidade(produtoId, itensVenda.find(item => item.produtoId === produtoId).quantidade - 1);
   };
 
   const handleRemoverProduto = (produtoId) => {
@@ -108,13 +116,30 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
                     <p className="text-gray-700">Preço Unitário: R$ {parseFloat(item.preco).toFixed(2)}</p>
                     <div className="flex items-center">
                       <label className="block text-sm font-medium text-gray-700 mr-2">Quantidade:</label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantidade}
-                        onChange={(e) => handleAlterarQuantidade(item.produtoId, e.target.value)}
-                        className="p-2 border border-gray-300 rounded-lg w-24"
-                      />
+                      <div className="flex items-center space-x-2">
+                        <button
+                          type="button"
+                          onClick={() => handleDecrementarQuantidade(item.produtoId)}
+                          className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400"
+                          disabled={item.quantidade <= 1}
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          min="1"
+                          value={item.quantidade}
+                          onChange={(e) => handleAlterarQuantidade(item.produtoId, Math.max(1, parseInt(e.target.value) || 1))}
+                          className="p-2 border border-gray-300 rounded-lg w-16 text-center"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleIncrementarQuantidade(item.produtoId)}
+                          className="bg-gray-300 text-gray-700 px-2 py-1 rounded hover:bg-gray-400"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <button
