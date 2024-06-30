@@ -33,7 +33,7 @@ const ListaDeVendas = ({ vendas, clientes, produtos, formasDePagamento }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg">
+    <div className="p-4 bg-white rounded-lg shadow-lg overflow-x-auto">
       <h2 className="text-xl font-bold mb-4">Vendas Realizadas</h2>
       {vendasList.length === 0 ? (
         <p className="text-gray-700">Nenhuma venda realizada até o momento.</p>
