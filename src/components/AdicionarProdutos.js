@@ -1,7 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, onNext }) => {
   const [searchTermProduto, setSearchTermProduto] = useState('');
+  const [subtotal, setSubtotal] = useState(0);
+
+  useEffect(() => {
+    calcularSubtotal();
+  }, [itensVenda]);
+
+  const calcularSubtotal = () => {
+    const total = itensVenda.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+    setSubtotal(total);
+  };
 
   const filteredProdutos = produtos.filter(produto =>
     produto.nome.toLowerCase().includes(searchTermProduto.toLowerCase())
@@ -37,12 +47,12 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700">Produto:</label>
+      {/* <label className="block text-sm font-medium text-gray-700">Produto:</label> */}
       <input
         type="text"
         value={searchTermProduto}
         onChange={(e) => setSearchTermProduto(e.target.value)}
-        placeholder="Digite o nome do produto"
+        placeholder="Digite o nome do produto..."
         className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
       />
       {searchTermProduto && (
@@ -97,6 +107,9 @@ const AdicionarProdutos = ({ produtos, itensVenda, setItensVenda, onPrevious, on
             })}
           </ul>
         )}
+        <div className="mt-4">
+          <h3 className="text-lg font-bold">Subtotal: R$ {subtotal.toFixed(2)}</h3>
+        </div>
       </div>
       <div className="flex justify-between mt-4">
         <button

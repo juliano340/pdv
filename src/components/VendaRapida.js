@@ -54,7 +54,7 @@ const VendaRapida = ({ clientes, produtos, formasDePagamento, onAddVenda }) => {
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
       <ToastContainer />
-      <h2 className="text-xl font-bold mb-4">Venda Rápida</h2>
+      <h2 className="text-xl font-bold mb-4">Adicionar produtos:</h2>
       {currentStep === 1 && (
         <SelecionarCliente
           clientes={clientes}
